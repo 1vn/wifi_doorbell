@@ -1,0 +1,6 @@
+[package]
+name = "wifi_doorbell"
+version = "0.1.0"
+authors = ["ivan <ivanzhangsolutions@gmail.com>"]
+
+[dependencies]
