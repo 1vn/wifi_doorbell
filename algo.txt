@@ -1,0 +1,18 @@
+algo
+1. arp -a -d to refresh
+2. read from list of known addr/mac addr
+3. ping all of them
+4. arp -a to get list of current ones
+5. listen for connects(?)
+6. when new connect, add to list of known addr/mac addr
+7. when old connect, notify user
+
+
+algo 2
+1. arp -a -d to refresh
+2. ping all possible addr
+3. arp -a get list of currently connected devices
+4. wait 30s
+5. arp -a -d to refresh
+6. compare against list of currently connected devices, notify additions and update list of currently connected devices
+7. repeat 4-6 until exit
