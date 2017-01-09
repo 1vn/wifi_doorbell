@@ -5,6 +5,10 @@ use std::time::Duration;
 
 fn exec_ping_ips_by_range(start: u32, end: u32){
 	for i in start..end {
+		if i < 1 || i == 255 {
+			return;
+		}
+
 		Command::new("ping")
 			.arg("-c 1")
 			.arg("-W 0.1")
@@ -56,7 +60,6 @@ fn get_current_devices() -> Vec<Device>{
 
 fn main() {
 	// 1. arp -a -d to refresh
-
 	refresh_arp_cache();
 
 	// 2. ping all possible addr
@@ -84,7 +87,7 @@ fn main() {
 		refresh_arp_cache();
 
 		let mut children = vec![];
-		for i in 1..52 {
+		for i in 1..51 {
 			children.push(thread::spawn(move ||{
 				exec_ping_ips_by_range((i-1) * 5, i * 5);
 			}));
@@ -97,11 +100,15 @@ fn main() {
 
 		// 6. compare against list of currently connected devices, notify additions and update list of currently connected devices
 		let check_devices = get_current_devices();
-
-		if(check_devices.len() != current_devices.len()){
+		if check_devices.len() != current_devices.len() {
 			println!("!-- change alert --!");
+			if check_devices.len() > current_devices.len() {
+				println!("!-- {} new devices --!", check_devices.len() - current_devices.len())
+			} else {
+				println!("!-- {} devices disconnected--!", check_devices.len() - current_devices.len())
+			}
+			current_devices = check_devices;
 		}
 
-		// 7. repeat 4-6 until exit		
 	}
 }
