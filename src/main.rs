@@ -60,8 +60,6 @@ fn get_current_devices() -> Vec<Device>{
 
 fn main() {
 	// 1. arp -a -d to refresh
-	refresh_arp_cache();
-
 	// 2. ping all possible addr
     let mut children = vec![];
 	for i in 1..52 {
@@ -84,8 +82,6 @@ fn main() {
 		thread::sleep(Duration::from_millis(10000));
 		
 		// 5. arp -a -d to refresh
-		refresh_arp_cache();
-
 		let mut children = vec![];
 		for i in 1..51 {
 			children.push(thread::spawn(move ||{
@@ -105,7 +101,7 @@ fn main() {
 			if check_devices.len() > current_devices.len() {
 				println!("!-- {} new devices --!", check_devices.len() - current_devices.len())
 			} else {
-				println!("!-- {} devices disconnected--!", check_devices.len() - current_devices.len())
+				println!("!-- {} devices disconnected--!", current_devices.len() - check_devices.len())
 			}
 			current_devices = check_devices;
 		}
