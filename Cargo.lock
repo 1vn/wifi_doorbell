@@ -1,4 +1,23 @@
 [root]
 name = "wifi_doorbell"
 version = "0.1.0"
+dependencies = [
+ "ears 0.3.5 (registry+https://github.com/rust-lang/crates.io-index)",
+]
 
+[[package]]
+name = "ears"
+version = "0.3.5"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+dependencies = [
+ "libc 0.2.19 (registry+https://github.com/rust-lang/crates.io-index)",
+]
+
+[[package]]
+name = "libc"
+version = "0.2.19"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+
+[metadata]
+"checksum ears 0.3.5 (registry+https://github.com/rust-lang/crates.io-index)" = "d968ac0e01d70cbd531a8f0d57ebf607fdb4f81d8f3e3edbfda69351547fb0e2"
+"checksum libc 0.2.19 (registry+https://github.com/rust-lang/crates.io-index)" = "9e030dc72013ed68994d1b2cbf36a94dd0e58418ba949c4b0db7eeb70a7a6352"

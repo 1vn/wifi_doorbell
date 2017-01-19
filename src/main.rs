@@ -1,7 +1,10 @@
+extern crate ears;
 use std::process::Command;
 use std::string::String;
 use std::thread;
 use std::time::Duration;
+
+use ears::{Sound, AudioController};
 
 fn exec_ping_ips_by_range(start: u32, end: u32){
 	for i in start..end {
@@ -12,13 +15,24 @@ fn exec_ping_ips_by_range(start: u32, end: u32){
 		Command::new("ping")
 			.arg("-c 1")
 			.arg("-W 0.1")
-			.arg(format!("192.168.0.{}", i))
+			.arg(format!("192.168.0.{}", i)) //make this into a general function
 			.output()
 			.expect("failed to execute ping");
-		println!("pinging: 192.168.0.{}", i);
+		//println!("pinging: 192.168.0.{}", i);
 	}
 
 }
+
+fn get_local_ip () -> String {
+	let output = Command::new("ipconfig getifaddr en0")
+			.arg("getifaddr")
+			.arg("en0")
+			.output()
+			.expect("failed to get local ip");
+	let s = String::from_utf8(output.stdout).unwrap();
+	return s
+}
+
 
 fn refresh_arp_cache() {
 	Command::new("arp")
@@ -26,6 +40,17 @@ fn refresh_arp_cache() {
 			.arg("-d")
 			.output()
 			.expect("failed to execute refresh");
+}
+
+fn play_sound() {
+	// Create a new Sound.
+    let mut snd = Sound::new("/Users/a1vn/projects/rust/wifi_doorbell/new.ogg").unwrap();
+
+    // Play the Sound
+    snd.play();
+
+    // Wait until the end of the sound
+    while snd.is_playing() {}
 }
 
 struct Device {
@@ -59,7 +84,10 @@ fn get_current_devices() -> Vec<Device>{
 }
 
 fn main() {
+
 	// 1. arp -a -d to refresh
+	refresh_arp_cache();
+	
 	// 2. ping all possible addr
     let mut children = vec![];
 	for i in 1..52 {
@@ -79,7 +107,7 @@ fn main() {
 	
 	loop {
 		// 4. wait 30s
-		thread::sleep(Duration::from_millis(10000));
+		thread::sleep(Duration::from_millis(5));
 		
 		// 5. arp -a -d to refresh
 		let mut children = vec![];
@@ -99,6 +127,7 @@ fn main() {
 		if check_devices.len() != current_devices.len() {
 			println!("!-- change alert --!");
 			if check_devices.len() > current_devices.len() {
+				play_sound();
 				println!("!-- {} new devices --!", check_devices.len() - current_devices.len())
 			} else {
 				println!("!-- {} devices disconnected--!", current_devices.len() - check_devices.len())
