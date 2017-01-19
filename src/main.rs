@@ -3,6 +3,8 @@ use std::process::Command;
 use std::string::String;
 use std::thread;
 use std::time::Duration;
+use std::env;
+
 
 use ears::{Sound, AudioController};
 
@@ -44,7 +46,9 @@ fn refresh_arp_cache() {
 
 fn play_sound() {
 	// Create a new Sound.
-    let mut snd = Sound::new("/Users/a1vn/projects/rust/wifi_doorbell/new.ogg").unwrap();
+	let p = env::current_dir().unwrap();
+
+    let mut snd = Sound::new(&format!("{}/new.ogg", p.display())).unwrap();
 
     // Play the Sound
     snd.play();
