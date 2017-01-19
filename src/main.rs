@@ -26,7 +26,7 @@ fn exec_ping_ips_by_range(start: u32, end: u32){
 }
 
 fn get_local_ip () -> String {
-	let output = Command::new("ipconfig getifaddr en0")
+	let output = Command::new("ipconfig")
 			.arg("getifaddr")
 			.arg("en0")
 			.output()
