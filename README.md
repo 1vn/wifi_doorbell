@@ -5,7 +5,7 @@ to run, change to repo directory and
 ``` cargo run ```
 
 Bugs
-- pings when broadcast channel is scanned
+- alerts when broadcast channel is scanned
 
 TODO
 - scan local network range using mask + interface ip
